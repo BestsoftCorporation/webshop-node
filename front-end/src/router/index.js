@@ -5,6 +5,7 @@ import Catalog from '@/views/Catalog.vue'
 import Product from '@/views/Product.vue'
 import NewProduct from "@/views/Edit.vue";
 import Admin from "@/views/Admin.vue";
+import Register from "@/views/Register.vue";
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/newProduct',
     name: 'newProduct',
     component: NewProduct
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
   },
   {
     path: '/newProduct/:id',

@@ -5,21 +5,27 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    products: []
+    products: [],
+    users: []
   },
   mutations: {
-    set_products: function (state,products) {
-      state.products=products;
+    set_products: function (state, products) {
+      state.products = products;
     },
 
     add_product: function (state, product) {
       state.products.push(product);
     },
 
-    remove_product: function (state,id){
-      for (let p=0;p<state.products.length;p++){
-        if (state.products[p].id===id){
-          state.products.splice(p,1);
+
+    add_users: function (state, user) {
+      state.users.push(user);
+    },
+
+    remove_product: function (state, id) {
+      for (let p = 0; p < state.products.length; p++) {
+        if (state.products[p].id === id) {
+          state.products.splice(p, 1);
           break;
         }
       }
@@ -37,27 +43,54 @@ export default new Vuex.Store({
   },
   actions: {
 
-    load_products: function ({commit}){
-      
-      fetch("http://localhost:8080/api/products",{method: 'get'}).then((response)=> {
-         if (!response.ok)
-           throw response;
-         return response.json()
+    load_products: function ({ commit }) {
+
+      fetch("http://localhost:8080/api/products", { method: 'get' }).then((response) => {
+        if (!response.ok)
+          throw response;
+        return response.json()
       }).then((jsonData) => {
-         commit('set_products',jsonData);
-      }).catch((error)=> {
+        commit('set_products', jsonData);
+      }).catch((error) => {
         if (typeof error.text === 'function')
           error.text().then((errorMessage) => {
-             alert(errorMessage);
+            alert(errorMessage);
           });
-          else
-            alert(error);
-        });
-      },
-  
+        else
+          alert(error);
+      });
+    },
 
-    new_product: function({ commit }, pro) {
-    
+
+
+    register: function ({ commit }, usr) {
+
+      fetch('http://localhost:8080/api/users', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: usr
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+        commit('add_users', jsonData);
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+
+
+    new_product: function ({ commit }, pro) {
+
       fetch('http://localhost:8080/api/products', {
         method: 'post',
         headers: {
@@ -81,8 +114,8 @@ export default new Vuex.Store({
       });
     },
 
-    change_product: function({ commit }, payload) {
-      
+    change_product: function ({ commit }, payload) {
+
       fetch(`http://localhost:8080/api/product/${payload.id}`, {
         method: 'put',
         headers: {
@@ -95,7 +128,7 @@ export default new Vuex.Store({
 
         return response.json();
       }).then((jsonData) => {
-        commit('update_product', {id: payload.id, pro:jsonData});
+        commit('update_product', { id: payload.id, pro: jsonData });
       }).catch((error) => {
         if (typeof error.text === 'function')
           error.text().then((errorMessage) => {
@@ -106,8 +139,8 @@ export default new Vuex.Store({
       });
     },
 
-    delete_product: function({ commit }, id) {
-     
+    delete_product: function ({ commit }, id) {
+
       fetch(`http://localhost:8080/api/product/${id}`, { method: 'delete' }).then((response) => {
         if (!response.ok)
           throw response;

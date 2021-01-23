@@ -17,7 +17,9 @@
       <b-navbar-nav class="ml-auto">
       
          
-           <b-nav-item href="/admin">admin</b-nav-item>
+          <b-nav-item href="/admin">admin</b-nav-item>
+          <b-nav-item href="/register">Register</b-nav-item>
+          <b-nav-item href="/Log in">Log in </b-nav-item>
          
       
       </b-navbar-nav>
