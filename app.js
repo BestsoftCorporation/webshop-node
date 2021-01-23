@@ -1,8 +1,10 @@
 const express = require('express');
 const pro = require('./routes/products');  // Nas ruter (REST API)
+const usr = require('./routes/user');  
 const history = require('connect-history-api-fallback');
 const path = require('path');
 var cors = require('cors');
+var session = require('express-session');
 
 const app = express();
 
@@ -15,7 +17,14 @@ app.use(function(req, res, next) {
 
 // Kazemo aplikaciji da za rute koje pocinju sa '/api' koristi nas ruter
 app.use('/api', pro);
+app.use('/api', usr);
 
+app.use(session({ 
+    secret: '123456cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+  }))
 app.use(cors())
 
 const staticMiddleware = express.static(path.join(__dirname, 'dist'));

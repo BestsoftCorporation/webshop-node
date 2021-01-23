@@ -1,6 +1,6 @@
-# NodeJS backend Webhop and Vue front-end
+# NodeJS backend Webshop and Vue front-end
 
-## Project ruh
+## Project run
 ```
 node app.js
 ```
