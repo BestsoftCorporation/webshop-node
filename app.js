@@ -1,6 +1,6 @@
 const express = require('express');
 const pro = require('./routes/products');  // Nas ruter (REST API)
-const usr = require('./routes/user');  
+const usr = require('./routes/user');
 const history = require('connect-history-api-fallback');
 const path = require('path');
 var cors = require('cors');
@@ -8,7 +8,7 @@ var session = require('express-session');
 
 const app = express();
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET", "PUT", "POST", "DELETE", "OPTIONS");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -19,12 +19,16 @@ app.use(function(req, res, next) {
 app.use('/api', pro);
 app.use('/api', usr);
 
-app.use(session({ 
+var sess;
+
+app.use(session({
     secret: '123456cat',
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 60000 }
-  }))
+}))
+
+
 app.use(cors())
 
 const staticMiddleware = express.static(path.join(__dirname, 'dist'));
