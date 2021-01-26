@@ -36,7 +36,7 @@ CREATE TABLE `users` (
   `first_name` varchar(30) DEFAULT NULL,
   `last_name` varchar(30) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `password` varchar(20) DEFAULT NULL
+  `password` varchar(200) DEFAULT NULL
 ) ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
