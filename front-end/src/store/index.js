@@ -6,17 +6,26 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     products: [],
-    users: []
+    users: [],
+    user: []
   },
   mutations: {
     set_products: function (state, products) {
       state.products = products;
+    },
+    set_token: function ( token) {
+      token;
+      //alert(token);
     },
 
     add_product: function (state, product) {
       state.products.push(product);
     },
 
+    set_user: function (state, user) {
+      state.user = user;
+      
+    },
 
     add_users: function (state, user) {
       state.users.push(user);
@@ -88,6 +97,61 @@ export default new Vuex.Store({
       });
     },
 
+    login: function ({ commit }, usr) {
+
+      fetch('http://localhost:8080/api/login', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: usr
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+         
+        return response.json();
+      }).then((jsonData) => {
+        localStorage.setItem('token', jsonData["token"]);
+        commit('set_token', jsonData["token"]);
+       // this.$router.push('/');
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+
+
+
+    load_user: function ({ commit }) {
+
+      fetch('http://localhost:8080/api/user', {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': localStorage.getItem('token')
+        },
+        
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+       
+        commit('set_user', jsonData);
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
 
     new_product: function ({ commit }, pro) {
 

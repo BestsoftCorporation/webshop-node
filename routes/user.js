@@ -86,26 +86,27 @@ route.post('/login', (req, res) => {
     if (error)
         res.status(400).send(error.details[0].message);
     else {
-        console.log("test");
-        let query = "SELECT * FROM users where email=? and password=?";
+        let query = "SELECT * FROM users where email=?";
         // const salt =  bcrypt.genSalt(10);
         // now we set user password to hashed password
         //const pass =  bcrypt.hash(req.body.password, salt);
-        let formated = mysql.format(query, [req.body.email, req.body.password]);
+        let formated = mysql.format(query, [req.body.email]);
 
         // Izvrsimo query
         pool.query(formated, (err, response) => {
             if (err)
                 res.status(500).send(err.sqlMessage);
             else {
-                if (!bcrypt.compareSync(req.body.password, "$2b$10$Afe8RU0fNToOi")) {
-                    //  return res.status(401).json({
-                    //    tite: 'login failed',
-                    //     error: 'invalid credentials'
-                    //  })
+                console.log(response[0]['password']);
+                console.log(req.body.password);
+                if (bcrypt.compareSync(req.body.password,response[0]['password'])) {
+                      return res.status(401).json({
+                        tite: 'login failed',
+                         error: 'invalid credentials'
+                      })
                 }
                 //IF ALL IS GOOD create a token and send to frontend
-                let token = jwt.sign({ userId: 5 }, 'secretkey');
+                let token = jwt.sign({ userId: response[0]['id'] }, 'secretkey');
                 return res.status(200).json({
                     title: 'login sucess',
                     token: token
@@ -118,6 +119,7 @@ route.post('/login', (req, res) => {
 
 route.get('/user', (req, res) => {
     let token = req.headers.token; //token
+    
     jwt.verify(token, 'secretkey', (err, decoded) => {
         if (err) return res.status(401).json({
             title: 'unauthorized'
@@ -127,7 +129,8 @@ route.get('/user', (req, res) => {
             if (err)
                 res.status(500).send(err.sqlMessage);
             else
-                res.send(rows);
+               
+                res.send(rows[0]);
         });
 
 
