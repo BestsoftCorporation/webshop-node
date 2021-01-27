@@ -134,6 +134,52 @@ route.post('/login', (req, res) => {
     }
 });
 
+
+
+route.post('/review', (req, res) => {
+    let token = req.headers.token; //token
+
+    jwt.verify(token, 'secretkey', (err, decoded) => {
+        if (err) return res.status(401).json({
+            title: 'unauthorized'
+        })
+
+        pool.query('select * from users where id=' + decoded.userId, (err, rows) => {
+            if (err)
+                res.status(500).send(err.sqlMessage);
+            else{
+
+                let query = "insert into reviews (idUser,idProduct, comment) values (?,?, ?)";
+            
+                let formated = mysql.format(query, [decoded.userId, req.body.idProduct, req.body.comment]);
+        
+                // Izvrsimo query
+                pool.query(formated, (err, response) => {
+                    if (err)
+                        res.status(500).send(err.sqlMessage);
+                    else {
+        
+                        query = 'select * from reviews where id=?';
+                        formated = mysql.format(query, [response.insertId]);
+        
+                        pool.query(formated, (err, rows) => {
+                            if (err)
+                                res.status(500).send(err.sqlMessage);
+                            else
+                                res.send(rows[0]);
+                        });
+                    }
+                });
+            }
+
+               
+        });
+
+
+    })
+});
+
+
 route.get('/user', (req, res) => {
     let token = req.headers.token; //token
 

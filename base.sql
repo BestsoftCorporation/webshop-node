@@ -38,6 +38,15 @@ CREATE TABLE `users` (
   `email` varchar(50) DEFAULT NULL,
   `password` varchar(200) DEFAULT NULL
 ) ;
+
+
+CREATE TABLE `reviews` (
+  `id` int(10) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	`idUser` int(10) UNSIGNED NOT NULL,
+  `idProduct` int(10) UNSIGNED NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+	`date` timestamp not null default current_timestamp on update current_timestamp
+) ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
