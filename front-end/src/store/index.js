@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     products: [],
     users: [],
+    reviews: [],
     user: []
   },
   mutations: {
@@ -22,9 +23,17 @@ export default new Vuex.Store({
       state.products.push(product);
     },
 
+    add_review: function (state, rev) {
+      state.reviews.push(rev);
+    },
+
+
     set_user: function (state, user) {
       state.user = user;
-      
+    },
+
+    set_reviews: function (state, rev) {
+      state.reviews = rev;
     },
 
     add_users: function (state, user) {
@@ -152,6 +161,59 @@ export default new Vuex.Store({
           alert(error);
       });
     },
+
+    load_reviews: function ({ commit },id) {
+
+      fetch('http://localhost:8080/api/reviews/'+id, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+       
+        commit('set_reviews', jsonData);
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+
+    post_review: function ({ commit }, rev) {
+
+      fetch('http://localhost:8080/api/review', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': localStorage.getItem('token')
+        },
+        body: rev
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+        commit('add_review', jsonData);
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+
 
     new_product: function ({ commit }, pro) {
 

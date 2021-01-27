@@ -44,6 +44,21 @@ route.get('/users', (req, res) => {
     });
 });
 
+route.get('/reviews/:id', (req, res) => {
+
+
+    let query = "select * from reviews where idProduct=?";
+    let formated = mysql.format(query, [req.params.id]);
+   
+    pool.query(formated, (err, rows) => {
+        if (err)
+            res.status(500).send(err.sqlMessage);
+        else
+            res.send(rows);
+    });
+});
+
+
 
 route.post('/users', (req, res) => {
 

@@ -5,7 +5,7 @@
             <b-row>
                 <b-col cm="6" >
                     <div >
-                        <ProductDetails :image="product.image"  :price="product.price" :name="product.name" :product="product"/>
+                        <ProductDetails :image="product.image"  :price="product.price" :name="product.name" :id="product.id" :product="product"/>
                     </div>
                 </b-col>
             </b-row>
@@ -41,10 +41,12 @@
                         return this.products[i];
                 return this.products[0];
             }
+            
         },
         methods: {
             ...mapActions(['load_products']),
 
+          
             toggleEdit: function () {
                 this.edit = !this.edit
             }
