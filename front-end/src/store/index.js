@@ -8,15 +8,16 @@ export default new Vuex.Store({
     products: [],
     users: [],
     reviews: [],
+    errors: [],
     user: []
   },
   mutations: {
     set_products: function (state, products) {
       state.products = products;
     },
-    set_token: function ( token) {
-      token;
-      //alert(token);
+  
+    set_error: function (state,error) {
+      state.errors = error;
     },
 
     add_product: function (state, product) {
@@ -30,6 +31,10 @@ export default new Vuex.Store({
 
     set_user: function (state, user) {
       state.user = user;
+    },
+
+    set_users: function (state, users) {
+      state.users = users;
     },
 
     set_reviews: function (state, rev) {
@@ -121,15 +126,19 @@ export default new Vuex.Store({
         return response.json();
       }).then((jsonData) => {
         localStorage.setItem('token', jsonData["token"]);
-        commit('set_token', jsonData["token"]);
+        var e=[];
+        commit('set_error',e);
+        
        // this.$router.push('/');
       }).catch((error) => {
         if (typeof error.text === 'function')
           error.text().then((errorMessage) => {
-            alert(errorMessage);
+            var e=[errorMessage]
+            commit('set_error', e);
           });
         else
-          alert(error);
+         commit('set_error', error);
+        
       });
     },
 
@@ -188,6 +197,34 @@ export default new Vuex.Store({
       });
     },
 
+
+    load_users: function ({ commit }) {
+
+      fetch('http://localhost:8080/api/users', {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+       
+        commit('set_users', jsonData);
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+
     post_review: function ({ commit }, rev) {
 
       fetch('http://localhost:8080/api/review', {
@@ -220,7 +257,8 @@ export default new Vuex.Store({
       fetch('http://localhost:8080/api/products', {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'token': localStorage.getItem('token')
         },
         body: pro
       }).then((response) => {
@@ -245,7 +283,8 @@ export default new Vuex.Store({
       fetch(`http://localhost:8080/api/product/${payload.id}`, {
         method: 'put',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'token': localStorage.getItem('token')
         },
         body: payload.pro
       }).then((response) => {
@@ -267,7 +306,7 @@ export default new Vuex.Store({
 
     delete_product: function ({ commit }, id) {
 
-      fetch(`http://localhost:8080/api/product/${id}`, { method: 'delete' }).then((response) => {
+      fetch(`http://localhost:8080/api/product/${id}`, { method: 'delete','token': localStorage.getItem('token') }).then((response) => {
         if (!response.ok)
           throw response;
 

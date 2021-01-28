@@ -18,13 +18,13 @@
           <b-nav-item href="/admin">admin</b-nav-item>
           <b-nav-item href="/register">Register</b-nav-item>
           <b-nav-item href="/login">Log in</b-nav-item>
-         
+         <b-nav-item href="/logout">Logout {{user.first_name}}</b-nav-item>
           
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
     
-        <b-jumbotron header="Phones" :lead="'there are ' + products.length + ' available phones | \nUser: '+user.first_name ">
+        <b-jumbotron header="Phones" :lead="'there are ' + products.length + ' available phones' ">
         </b-jumbotron>
     </div>
 </template>

@@ -32,8 +32,16 @@
                 >
               </b-col>
             </b-form>
+           
+
             <div v-for="review in reviews" :key="review.id" class="col-md-4">
-              <p class="card-text">{{ review.comment }}</p>
+              <div v-for="usr in users" :key="usr.id" >
+                 <div v-if="review.idUser==usr.id">
+                  <b> {{usr.first_name}}</b>:<p class="card-text">{{ review.comment }} - {{ review.date }}</p>
+                </div>
+              </div>
+              
+
             </div>
           </div>
         </div>
@@ -85,7 +93,7 @@ export default {
 
     postComment: function () {
       const url = window.location.href;
-      alert(this.comm);
+
       const rev = JSON.stringify({
         comment: this.comm,
         idProduct: url.split("/").slice(-1)[0],

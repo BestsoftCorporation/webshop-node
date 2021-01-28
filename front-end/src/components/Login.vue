@@ -27,21 +27,22 @@
       </b-row>
 
       <b-col sm="2" offset="2">
-        <b-button variant="primary" size="lg" @click="checkForm"
+        <b-button variant="primary" size="sm" @click="checkForm"
           >Log in</b-button
         >
       </b-col>
-      <div v-if="errors.length" class="alert alert-danger" role="alert">
+      <div v-if="errors.length!=0" class="alert alert-danger" role="alert">
         <b>Please correct the following error(s):</b>
         <ul>
           <li v-for="error in errors" :key="error.id">{{ error }}</li>
+
         </ul>
       </div>
 
-      <div v-if="added" class="alert alert-success" role="alert">
+      <div  v-if="errors.length==0 && added"  class="alert alert-success" role="alert">
         Login successfull!
       </div>
-      <div v-if="err" class="alert alert-danger" role="alert">Error</div>
+     
     </b-form>
   </b-container>
 </template>
@@ -52,7 +53,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "Logins",
   computed: {
-    ...mapState(["users"]),
+    ...mapState(["users","errors"]),
   },
   props: {
 
@@ -70,7 +71,7 @@ export default {
      
       newPassword: "",
       newEmail: "",
-      errors: [],
+     
       err: false,
       added: false,
     };
@@ -85,11 +86,11 @@ export default {
     ...mapActions(["login","load_user"]),
 
     checkForm: function () {
-      this.errors = [];
+     // this.errors = [];
 
-      if (this.errors.length == 0) {
+    //  if (this.errors.length == 0) {
         this.addNew();
-      }
+    //  }
     },
 
     addNew: function () {
@@ -101,7 +102,9 @@ export default {
       this.login(usr);
       this.load_user(); 
       this.err=true;
+      
       this.added = true;
+     // this.$router.push('/catalog') 
     },
   },
 };

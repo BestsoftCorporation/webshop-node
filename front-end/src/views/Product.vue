@@ -5,7 +5,7 @@
             <b-row>
                 <b-col cm="6" >
                     <div >
-                        <ProductDetails :image="product.image"  :price="product.price" :name="product.name" :id="product.id" :product="product"/>
+                        <ProductDetails :image="product.image"  :price="product.price" :name="product.name" :id="product.id" :product="product" :users="users"/>
                     </div>
                 </b-col>
             </b-row>
@@ -33,7 +33,7 @@
             }
         },
         computed: {
-            ...mapState(['products']),
+            ...mapState(['products','users']),
 
             product: function () {
                 for (let i = 0; i < this.products.length; i++)

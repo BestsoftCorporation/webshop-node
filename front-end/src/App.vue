@@ -14,7 +14,7 @@
     export default {
         name: "App",
         methods: {
-            ...mapActions(['load_products','new_product','load_user'])
+            ...mapActions(['load_products','new_product','load_user','load_users'])
         },
         computer: {
           ...mapState(['user'])
@@ -22,6 +22,7 @@
         mounted: function() {
             this.load_products();     
             this.load_user(); 
+            this.load_users();
         }
     }
 </script>

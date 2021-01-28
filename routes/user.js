@@ -36,7 +36,7 @@ const login = Joi.object().keys({
 
 route.get('/users', (req, res) => {
 
-    pool.query('select * from users', (err, rows) => {
+    pool.query('select first_name,last_name,id from users', (err, rows) => {
         if (err)
             res.status(500).send(err.sqlMessage);
         else
